@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Color Purple | A Modern Literary Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Modern Font Pairing: Clash Display for headings, Satoshi for body -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Modernized Purple Palette
+                        'violet-100': '#f3e8ff',
+                        'violet-200': '#e9d5ff',
+                        'violet-300': '#d8b4fe',
+                        'violet-400': '#c084fc',
+                        'violet-500': '#a855f7',
+                        'violet-600': '#9333ea',
+                        'violet-700': '#7e22ce',
+                        'violet-800': '#6b21a8',
+                        'violet-950': '#3b0764',
+                        // Vibrant Accent
+                        'accent-gold': '#fbbf24',
+                    },
+                    fontFamily: {
+                        'heading': ['"Clash Display"', 'sans-serif'],
+                        'body': ['"Satoshi"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "url('https://www.transparenttextures.com/patterns/cubes.png')",
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    },
+                    boxShadow: {
+                        'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+                        'glass-hover': '0 8px 40px rgba(0, 0, 0, 0.15)',
+                        'neon': '0 0 20px rgba(168, 85, 247, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Core Styles */
+        body { font-family: 'Satoshi', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Clash Display', sans-serif; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1e1b4b; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #9333ea, #4f46e5); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #a855f7, #6366f1); }
+
+        /* Glassmorphism & Modern Effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Removed .navbar-solid CSS */
+        
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, #c084fc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-gradient-gold {
+            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ACTIVE NAV LINK STYLE - YELLOW HIGHLIGHT */
+        .nav-active {
+            color: #fbbf24 !important; /* accent-gold */
+            background-color: rgba(251, 191, 36, 0.1); /* light gold background for visual flair */
+        }
+        
+        /* DARK NAV TEXT for light sections (Author and About) */
+        .nav-text-dark {
+            color: #334155 !important; /* slate-700 */
+        }
+        
+        /* Ensure dark text links still use yellow accent when active */
+        .nav-text-dark.nav-active {
+             color: #fbbf24 !important; /* Re-apply yellow */
+             background-color: rgba(251, 191, 36, 0.1);
+        }
+        
+        /* When nav links are dark, change hover color from white to dark-mode appropriate */
+        .nav-text-dark:hover {
+            background-color: rgba(0, 0, 0, 0.05) !important;
+            color: #0f172a !important; /* slate-950 */
+        }
+
+        /* Card Hover Effects */
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px -15px rgba(126, 34, 206, 0.3);
+        }
+
+        /* Section Dividers */
+        .wave-divider {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+        .wave-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+        .wave-divider .shape-fill {
+            fill: #ffffff;
+        }
+        .dark .wave-divider .shape-fill {
+            fill: #0f172a; /* Slate-900 for dark mode */
+        }
+
+        /* UPDATED MOBILE MENU STYLES */
+        .mobile-menu-panel {
+            transform: translateY(-20px); /* Slide down from behind navbar */
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 250ms ease, opacity 250ms ease;
+            width: 95%; /* Make it wider */
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0 0 1.5rem 1.5rem; /* Rounded bottom corners */
+        }
+        .mobile-menu-panel.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Character Card Hover Transformation Styles */
+        .char-icon-container {
+            position: relative;
+            height: 64px; /* w-16 h-16 */
+            width: 64px; /* w-16 h-16 */
+            margin-bottom: 1rem;
+        }
+        .char-icon-base, .char-icon-hover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        /* Base emoji state */
+        .char-icon-base {
+            opacity: 1;
+            transform: scale(1);
+        }
+        /* Hover image state (initially hidden) */
+        .char-icon-hover {
+            opacity: 0;
+            transform: scale(0.5) rotate(5deg);
+        }
+        /* Group Hover effects */
+        .group:hover .char-icon-base {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        .group:hover .char-icon-hover {
+            opacity: 1;
+            transform: scale(1.05) rotate(0deg); /* slight scale to feel animated */
+        }
+        /* Image styling for aesthetic */
+        .char-image {
+            filter: grayscale(80%) contrast(1.2);
+            box-shadow: 0 0 15px rgba(126, 34, 206, 0.5);
+            transition: all 0.4s ease;
+        }
+        .group:hover .char-image {
+            filter: grayscale(0%) contrast(1.1) brightness(1.1);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.7);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 antialiased selection:bg-violet-500/30 selection:text-violet-200">
+
+    <!-- Floating Navigation (Reverted to original floating style) -->
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 glass-dark rounded-full px-6 py-3 shadow-glass transition-all duration-300" id="navbar">
+        <div class="flex justify-between items-center">
+            <!-- Brand Link -->
+            <a href="#" class="text-xl font-heading font-bold text-white flex items-center gap-2" id="brand-link">
+                <span class="text-2xl "></span>
+                <span class="tracking-tight">The Purple Hub</span>
+            </a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center space-x-1" id="desktop-nav-links">
+                <a href="#author" class="nav-link px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition">Author</a>
+                <a href="#about" class="nav-link px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition">About</a>
+                <a href="#awards" class="nav-link px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition">Awards</a>
+                <a href="#characters" class="nav-link px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition">Characters</a>
+                <a href="#themes" class="nav-link px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition">Themes</a>
+                <a href="#symbols" class="nav-link px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition">Symbols</a>
+                <a href="#reflection" class="nav-link ml-2 px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full hover:shadow-neon transition-all duration-300">Reflection</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded-full hover:bg-white/10 transition">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Full-Screen Mobile Menu (Updated: Removed close button and "Navigate" text) -->
+    <div id="mobile-menu" class="md:hidden fixed top-0 left-0 w-full pt-[72px] z-40 hidden">
+        <div class="mobile-menu-panel glass-dark shadow-xl px-6 py-4 mx-auto w-[95%] flex flex-col space-y-2 text-left">
+            <!-- Removed the header with "Navigate" and "X" button -->
+            <a href="#author" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-300 transition menu-link py-2 px-3 rounded-xl">Author</a>
+            <a href="#about" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-300 transition menu-link py-2 px-3 rounded-xl">About</a>
+            <a href="#awards" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-300 transition menu-link py-2 px-3 rounded-xl">Awards</a>
+            <a href="#characters" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-300 transition menu-link py-2 px-3 rounded-xl">Characters</a>
+            <a href="#themes" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-300 transition menu-link py-2 px-3 rounded-xl">Themes</a>
+            <a href="#symbols" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-300 transition menu-link py-2 px-3 rounded-xl">Symbols</a>
+            <a href="#reflection" class="mobile-nav-link text-base font-heading font-semibold text-white hover:text-violet-200 transition menu-link py-3 px-4 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-2xl text-center shadow-neon mt-4">Reflection</a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION (ID added for ScrollSpy) -->
+    <header id="hero" class="target-section relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-950">
+        <!-- Animated Background Gradients -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+            <div class="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] rounded-full bg-violet-900/30 blur-[120px] animate-pulse-slow"></div>
+            <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-900/30 blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        </div>
+        <div class="absolute inset-0 bg-hero-pattern opacity-5"></div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center">
+           <br>   <span class="inline-block py-1.5 px-4 rounded-full glass text-violet-300 text-sm font-bold tracking-wider uppercase mb-8 reveal">
+                Great Books Project
+            </span>
+                <h1 class="text-4xl sm:text-6xl md:text-8xl font-heading font-extrabold text-white leading-none mb-8 reveal" style="transition-delay: 100ms;">
+                    The <span class="text-gradient">Purple</span><br>Literary Hub
+                </h1>
+                <p class="text-xl md:text-2xl text-slate-300 font-body max-w-2xl mx-auto mb-12 leading-relaxed reveal" style="transition-delay: 200ms;">
+                    Dive into the profound depths of Alice Walker's masterpiece. Explore its meaning, message, and enduring beauty.
+                </p>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 reveal" style="transition-delay: 300ms;">
+                    <a href="#author" class="px-8 py-4 text-lg font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/10 rounded-full backdrop-blur-md transition-all duration-300 group">
+                        Start Exploring <i class="fas fa-arrow-down ml-2 group-hover:translate-y-1 transition-transform"></i>
+                    </a>
+                </div>
+        </div>
+
+        <!-- Wave Divider -->
+        <div class="wave-divider">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- ABOUT THE AUTHOR -->
+    <section id="author" class="target-section py-24 bg-white dark:bg-slate-900 relative z-10">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="flex flex-col md:flex-row items-start gap-16">
+                <!-- Author Image / Art (FIXED: removed sticky positioning on mobile) -->
+                <div class="md:w-2/5 w-full md:sticky md:top-24 reveal">
+                    <div class="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl relative group">
+                        <!-- Alice Walker Image inserted here -->
+                        <img src="https://english.colostate.edu/wp-content/uploads/sites/56/2017/02/alicewalker.jpg" 
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x1000/581c87/ffffff?text=Image+Unavailable';" 
+                            alt="Alice Walker Portrait" 
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-80"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <h3 class="text-4xl font-heading font-bold text-white leading-tight">Alice Walker</h3>
+                            <p class="text-violet-300 text-lg mt-2">Novelist, Poet, Activist</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Author Details -->
+                <div class="md:w-3/5 w-full space-y-10">
+                    <div class="reveal" style="transition-delay: 100ms;">
+                        <h2 class="text-5xl font-heading font-bold text-slate-900 dark:text-white mb-6">
+                            The Woman Behind <span class="text-gradient">The Words</span>
+                        </h2>
+                        <p class="text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
+                            A visionary voice in American literature. Walker's work fearlessly explores the depths of human experience, focusing on the lives of Black women with unflinching honesty and profound empathy.
+                        </p>
+                    </div>
+                    
+                    <div class="grid gap-6 reveal" style="transition-delay: 200ms;">
+                        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover-card">
+                            <h4 class="flex items-center text-lg font-heading font-bold text-slate-900 dark:text-white mb-3">
+                                <i class="fas fa-history text-violet-500 mr-3"></i> Background
+                            </h4>
+                            <p class="text-slate-600 dark:text-slate-400">
+                                Born in 1944 in Eatonton, Georgia. She coined the term "womanist" to define a feminist of color. Her lyrical style is deeply rooted in the oral traditions of the American South.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover-card">
+                            <h4 class="flex items-center text-lg font-heading font-bold text-slate-900 dark:text-white mb-3">
+                                <i class="fas fa-feather-alt text-violet-500 mr-3"></i> Key Themes
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 text-sm rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 font-medium">Racism & Sexism</span>
+                                <span class="px-3 py-1 text-sm rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 font-medium">Spiritual Growth</span>
+                                <span class="px-3 py-1 text-sm rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 font-medium">Heritage</span>
+                                <span class="px-3 py-1 text-sm rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 font-medium">Healing Power of Story</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 rounded-[2rem] bg-gradient-to-br from-violet-600 to-indigo-700 shadow-xl text-white reveal hover-card" style="transition-delay: 300ms;">
+                        <h4 class="text-xl font-heading font-bold mb-4 flex items-center">
+                            <i class="fas fa-star text-accent-gold mr-3"></i> Significance of 'The Color Purple'
+                        </h4>
+                        <p class="text-violet-100 text-lg leading-relaxed italic">
+                            "It broke silence on domestic abuse within the community while celebrating the resilience, love, and unbreakable spirit of Black women. It is her definitive masterpiece."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT THE COLOR PURPLE -->
+    <section id="about" class="target-section py-24 bg-slate-100 dark:bg-slate-950 relative">
+        <!-- Curved Top Divider -->
+        <div class="absolute top-0 left-0 w-full overflow-hidden line-height-0 transform rotate-0">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-[calc(100%+1.3px)] h-[60px]">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-white dark:fill-slate-900"></path>
+            </svg>
+        </div>
+
+        <div class="container mx-auto px-6 max-w-6xl relative z-10 pt-12">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-5xl font-heading font-bold text-slate-900 dark:text-white mb-6">About The Novel</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400">A monumental work that explores the journey from oppression to self-discovery through the power of love and sisterhood.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Summary Card -->
+                <div class="p-8 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-lg hover-card reveal">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mb-8 shadow-lg shadow-violet-500/30">
+                        <i class="fas fa-book-open text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-4">The Story</h3>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Spanning forty years, it follows Celie, an abused African American woman in the South. Through letters to God and her sister Nettie, and transformative relationships with Shug Avery and Sofia, Celie discovers her voice, worth, and independence.
+                    </p>
+                </div>
+
+                <!-- Genre & Setting Card -->
+                <div class="p-8 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-lg hover-card reveal" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-pink-600 flex items-center justify-center mb-8 shadow-lg shadow-fuchsia-500/30">
+                        <i class="fas fa-compass text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-4">Setting the Scene</h3>
+                    <ul class="space-y-4 text-slate-600 dark:text-slate-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-clock mt-1 mr-3 text-fuchsia-500"></i>
+                            <span><strong>Time:</strong> Early 20th Century (approx. 1910–1940).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-fuchsia-500"></i>
+                            <span><strong>Place:</strong> Rural Georgia, USA (paralleling letters from Africa).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-theater-masks mt-1 mr-3 text-fuchsia-500"></i>
+                            <span><strong>Tone:</strong> Epistolary, raw, confessional, and ultimately hopeful.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Main Message Card (Completed) -->
+                <div class="p-8 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-lg hover-card reveal" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-8 shadow-lg shadow-amber-500/30">
+                        <i class="fas fa-lightbulb text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-4">Core Message</h3>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        The novel is a testament to resilience, the triumph of sisterhood over patriarchy, and the spiritual search for God within oneself and nature. It champions self-love and the right to define one's own destiny, regardless of past trauma.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AWARDS AND RECOGNITION -->
+    <section id="awards" class="target-section py-24 bg-slate-900 relative">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-5xl font-heading font-bold text-white mb-6">
+                    <span class="text-gradient-gold">Award-Winning</span> Masterpiece
+                </h2>
+                <p class="text-xl text-slate-400">Recognized globally for its literary merit and profound social impact, "The Color Purple" is a landmark in modern literature.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Award 1 -->
+                <div class="p-8 rounded-[2rem] glass-dark shadow-xl border border-accent-gold/20 hover-card reveal">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-trophy text-4xl text-accent-gold mr-4"></i>
+                        <div>
+                            <h3 class="text-2xl font-heading font-bold text-white">Pulitzer Prize</h3>
+                            <p class="text-slate-400">Fiction</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300">Awarded in 1983, recognizing the novel as the most distinguished fictional work by an American author.</p>
+                </div>
+                <!-- Award 2 -->
+                <div class="p-8 rounded-[2rem] glass-dark shadow-xl border border-accent-gold/20 hover-card reveal" style="transition-delay: 100ms;">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-scroll text-4xl text-accent-gold mr-4"></i>
+                        <div>
+                            <h3 class="text-2xl font-heading font-bold text-white">National Book Award</h3>
+                            <p class="text-slate-400">Fiction</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300">Also won in 1983, making Alice Walker the first Black woman to win both major awards for the same work.</p>
+                </div>
+                <!-- Adaptations -->
+                <div class="p-8 rounded-[2rem] glass-dark shadow-xl border border-accent-gold/20 hover-card reveal" style="transition-delay: 200ms;">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-film text-4xl text-accent-gold mr-4"></i>
+                        <div>
+                            <h3 class="text-2xl font-heading font-bold text-white">Cultural Impact</h3>
+                            <p class="text-slate-400">Film & Musical Adaptations</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300">The story has been adapted into two major motion pictures and a celebrated Broadway musical, extending its legacy globally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KEY CHARACTERS -->
+    <section id="characters" class="target-section py-24 bg-slate-950 relative">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-5xl font-heading font-bold text-white mb-6">
+                    A Constellation of <span class="text-gradient">Resilience</span>
+                </h2>
+                <p class="text-xl text-slate-400">The complex individuals whose lives intersect, creating a powerful narrative of survival and self-discovery.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Character 1: Celie -->
+                <div class="group p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-violet-700 hover-card reveal">
+                    <div class="char-icon-container">
+                        <!-- Emoji Layer (Base State) -->
+                        <div class="char-icon-base w-full h-full rounded-full bg-violet-500 flex items-center justify-center text-5xl">
+                            <i class="fas fa-user text-3xl text-white"></i>
+                        </div>
+                        <!-- Image Layer (Hover State) -->
+                        <div class="char-icon-hover w-full h-full">
+                            <img src="https://gonewiththetwins.com/wp-content/uploads/2023/11/colorpurple1985_tall.jpg" 
+                                alt="Celie from The Color Purple (1985 film)" 
+                                class="char-image w-full h-full object-cover rounded-full"
+                                onerror="this.onerror=null; this.src='https://placehold.co/100x100/3b0764/ffffff?text=CELIE';">
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-violet-300 mb-2">Celie</h3>
+                    <p class="text-sm font-semibold text-white mb-3">The Protagonist / Letter Writer</p>
+                    <p class="text-slate-400 text-sm">
+                        Starts silent and abused, but her epistolary relationship with God and Nettie, and her bond with Shug, awaken her independence and voice.
+                    </p>
+                </div>
+                <!-- Character 2: Shug Avery -->
+                <div class="group p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-violet-700 hover-card reveal" style="transition-delay: 100ms;">
+                    <div class="char-icon-container">
+                        <!-- Emoji Layer (Base State) -->
+                        <div class="char-icon-base w-full h-full rounded-full bg-fuchsia-500 flex items-center justify-center text-5xl">
+                            <i class="fas fa-user text-3xl text-white"></i>
+                        </div>
+                        <!-- Image Layer (Hover State) -->
+                        <div class="char-icon-hover w-full h-full">
+                            <img src="https://static01.nyt.com/images/2024/01/02/multimedia/color-purple-anatomy1-wjfv/color-purple-anatomy1-wjfv-mediumSquareAt3X.jpg" 
+                                alt="Shug Avery from The Color Purple" 
+                                class="char-image w-full h-full object-cover rounded-full"
+                                onerror="this.onerror=null; this.src='https://placehold.co/100x100/9333ea/ffffff?text=SHUG';">
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-fuchsia-300 mb-2">Shug Avery</h3>
+                    <p class="text-sm font-semibold text-white mb-3">The Blues Singer / Mentor</p>
+                    <p class="text-slate-400 text-sm">
+                        A fiercely independent, sensual woman who teaches Celie about self-love, spirituality, and finding joy outside of conventional bounds.
+                    </p>
+                </div>
+                <!-- Character 3: Sofia -->
+                <div class="group p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-violet-700 hover-card reveal" style="transition-delay: 200ms;">
+                    <div class="char-icon-container">
+                        <!-- Emoji Layer (Base State) -->
+                        <div class="char-icon-base w-full h-full rounded-full bg-green-500 flex items-center justify-center text-5xl">
+                            <i class="fas fa-user text-3xl text-white"></i>
+                        </div>
+                        <!-- Image Layer (Hover State) -->
+                        <div class="char-icon-hover w-full h-full">
+                            <img src="https://colorpurple70.wordpress.com/wp-content/uploads/2014/03/article-2304677-191d36b2000005dc-637_634x420.jpg" 
+                                alt="Sofia from The Color Purple" 
+                                class="char-image w-full h-full object-cover rounded-full"
+                                onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b21a8/ffffff?text=SOFIA';">
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-green-300 mb-2">Sofia</h3>
+                    <p class="text-sm font-semibold text-white mb-3">The Headstrong Rebel</p>
+                    <p class="text-slate-400 text-sm">
+                        Embodies physical strength and refusal to be dominated. Her defiance comes at a great cost, yet her spirit remains unbroken.
+                    </p>
+                </div>
+                <!-- Character 4: Nettie -->
+                <div class="group p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-violet-700 hover-card reveal" style="transition-delay: 300ms;">
+                    <div class="char-icon-container">
+                        <!-- Emoji Layer (Base State) -->
+                        <div class="char-icon-base w-full h-full rounded-full bg-indigo-500 flex items-center justify-center text-5xl">
+                            <i class="fas fa-user text-3xl text-white"></i>
+                        </div>
+                        <!-- Image Layer (Hover State) -->
+                        <div class="char-icon-hover w-full h-full">
+                            <img src="https://static.wikia.nocookie.net/warner-bros-entertainment/images/1/13/The-Color-Purple-Trailer-01-052223-53e109fe6c2c438c8a8545bd5bf6600c.jpg/revision/latest?cb=20240701210015" 
+                                alt="Nettie from The Color Purple" 
+                                class="char-image w-full h-full object-cover rounded-full"
+                                onerror="this.onerror=null; this.src='https://placehold.co/100x100/4c1d95/ffffff?text=NETTIE';">
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-indigo-300 mb-2">Nettie</h3>
+                    <p class="text-sm font-semibold text-white mb-3">The Sister / Missionary</p>
+                    <p class="text-slate-400 text-sm">
+                        Celie's younger sister who escapes to Africa. Her letters provide an educated, global perspective and sustain Celie's hope.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAJOR THEMES -->
+    <section id="themes" class="target-section py-24 bg-slate-900 relative">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-5xl font-heading font-bold text-white mb-6">
+                    Exploring the <span class="text-gradient">Central Themes</span>
+                </h2>
+                <p class="text-xl text-slate-400">The core ideas that challenge and uplift readers, driving the narrative's lasting significance.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Theme 1: Voice & Silence -->
+                <div class="p-8 rounded-[2rem] bg-white/5 shadow-lg border border-violet-800 hover-card reveal">
+                    <h3 class="text-3xl font-heading font-bold text-violet-400 mb-4">Voice & Silence</h3>
+                    <p class="text-slate-300">
+                        Celie begins the novel silenced by abuse, only speaking through letters to God. The acquisition of a personal voice—through writing, community, and economic independence—is her greatest triumph.
+                    </p>
+                </div>
+                <!-- Theme 2: Female Relationships -->
+                <div class="p-8 rounded-[2rem] bg-white/5 shadow-lg border border-violet-800 hover-card reveal" style="transition-delay: 100ms;">
+                    <h3 class="text-3xl font-heading font-bold text-violet-400 mb-4">Sisterhood & Love</h3>
+                    <p class="text-slate-300">
+                        The powerful, healing bond between Celie, Nettie, Shug, and Sofia is central. These female relationships are the only source of pure, sustaining love in the protagonist's early life.
+                    </p>
+                </div>
+                <!-- Theme 3: Spirituality & God -->
+                <div class="p-8 rounded-[2rem] bg-white/5 shadow-lg border border-violet-800 hover-card reveal" style="transition-delay: 200ms;">
+                    <h3 class="text-3xl font-heading font-bold text-violet-400 mb-4">Re-defining God</h3>
+                    <p class="text-slate-300">
+                        Celie's initial view of God as a distant, judgmental man is challenged by Shug, who introduces her to a God that is pervasive, internal, and found in the beauty of nature and human connection.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SYMBOLISM GALLERY -->
+    <section id="symbols" class="target-section py-24 bg-slate-950 relative">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-5xl font-heading font-bold text-white mb-6">
+                    The Power of <span class="text-gradient-gold">Symbolism</span>
+                </h2>
+                <p class="text-xl text-slate-400">Key objects and concepts that carry immense thematic weight and chart Celie's transformative journey.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Symbol 1: The Color Purple -->
+                <div class="p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-fuchsia-700 hover-card reveal">
+                    <div class="w-16 h-16 rounded-full bg-fuchsia-500 flex items-center justify-center mb-4 char-card-icon">
+                        <i class="fas fa-palette text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-fuchsia-300 mb-2">The Color Purple</h3>
+                    <p class="text-slate-400 text-sm">
+                        Represents the beauty of life, the natural world, and divine presence. It is the realization that joy and pleasure are God’s gift, and we must take the time to notice them.
+                    </p>
+                </div>
+                
+                <!-- Symbol 2: The Letters -->
+                <div class="p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-indigo-700 hover-card reveal" style="transition-delay: 100ms;">
+                    <div class="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center mb-4 char-card-icon">
+                        <i class="fas fa-pen-nib text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-indigo-300 mb-2">Letters / Writing</h3>
+                    <p class="text-slate-400 text-sm">
+                        The epistolary form itself symbolizes Celie's trapped voice. Writing to God and Nettie is her lifeline and the only means by which she can articulate her suffering and, eventually, her selfhood.
+                    </p>
+                </div>
+
+                <!-- Symbol 3: Pants / Trousers -->
+                <div class="p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-teal-700 hover-card reveal" style="transition-delay: 200ms;">
+                    <div class="w-16 h-16 rounded-full bg-teal-500 flex items-center justify-center mb-4 char-card-icon">
+                        <i class="fas fa-tshirt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-teal-300 mb-2">Celie's Trousers</h3>
+                    <p class="text-slate-400 text-sm">
+                        After achieving financial and emotional independence, Celie starts a business making trousers. This symbolizes her defiance of prescribed gender roles and her self-made economic freedom.
+                    </p>
+                </div>
+                
+                <!-- Symbol 4: African Masks -->
+                <div class="p-6 rounded-[2rem] bg-slate-800/50 shadow-xl border border-amber-700 hover-card reveal" style="transition-delay: 300ms;">
+                    <div class="w-16 h-16 rounded-full bg-amber-500 flex items-center justify-center mb-4 char-card-icon">
+                        <i class="fas fa-mask text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-amber-300 mb-2">African Masks/Art</h3>
+                    <p class="text-slate-400 text-sm">
+                        Nettie's letters send Celie these cultural artifacts, linking Celie back to her African roots and providing her with a tangible connection to her true heritage and ancestral strength.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- REFLECTION/CONCLUSION -->
+    <section id="reflection" class="target-section py-24 bg-slate-900 relative">
+        <div class="container mx-auto px-6 max-w-4xl text-center">
+            <div class="p-10 md:p-16 rounded-[3rem] glass-dark border-2 border-violet-700/50 shadow-neon reveal">
+                <p class="text-xl font-body italic text-violet-300 mb-6">
+                    "I think it pisses God off if you walk by the color purple in a field somewhere and don't notice it."
+                </p>
+                <h2 class="text-5xl font-heading font-extrabold text-white mb-6">
+                    The Enduring <span class="text-gradient-gold">Legacy</span>
+                </h2>
+                <p class="text-2xl text-slate-300 leading-relaxed mb-8">
+                    "The Color Purple" remains a crucial document of American history and literature. It is a powerful reminder that every life holds the capacity for joy, freedom, and profound transformation.
+                </p>
+                <a href="#hero" class="inline-flex items-center px-8 py-3 text-lg font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full hover:shadow-neon transition-all duration-300">
+                    Return to Top <i class="fas fa-angle-up ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 py-12 border-t border-violet-900/50">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm text-slate-500 font-body">
+                &copy; 2025 The Purple Literary Hub. A student project inspired by the work of Alice Walker.
+            </p>
+            <div class="flex justify-center space-x-4 mt-4 text-slate-600">
+                <a href="https://alicewalkersgarden.com/" target="_blank" class="hover:text-violet-400 transition" aria-label="Alice Walker Official Site">
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                <a href="#" class="hover:text-violet-400 transition" aria-label="Go to the top of the page">
+                    <i class="fas fa-arrow-up"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR INTERACTIVITY AND SCROLLSPY -->
+    <script>
+        // --- 1. Mobile Menu Toggle ---
+        const setupMobileMenu = () => {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            // Removed closeBtn constant as it is no longer in HTML
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuPanel = mobileMenu?.querySelector('.mobile-menu-panel');
+            const menuLinks = document.querySelectorAll('.menu-link');
+            const breakpoint = window.matchMedia('(min-width: 768px)');
+
+            // Updated conditional check
+            if (!menuBtn || !mobileMenu || !menuPanel) return;
+
+            const closeMenu = () => {
+                menuPanel.classList.remove('open');
+                // Use a slight delay to allow the animation to finish before hiding the container
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 250); 
+            };
+            
+            const openMenu = () => {
+                mobileMenu.classList.remove('hidden');
+                menuPanel.classList.add('open');
+            };
+
+            // New: Toggle logic for the hamburger button
+            const toggleMenu = () => {
+                if (menuPanel.classList.contains('open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            };
+
+            menuBtn.addEventListener('click', toggleMenu); 
+            menuLinks.forEach(link => link.addEventListener('click', closeMenu));
+            breakpoint.addEventListener('change', (e) => { if (e.matches) closeMenu(); });
+        };
+
+        // --- 2. Scroll Reveal Animation ---
+        const setupScrollReveal = () => {
+            const revealElements = document.querySelectorAll('.reveal');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            revealElements.forEach(element => {
+                observer.observe(element);
+            });
+        };
+
+        // --- 3. ScrollSpy for Active Navigation Link and Dynamic Color Change ---
+        const setupScrollSpy = () => {
+            // Sections that have a light background (white/slate-100) and need dark text in the navbar
+            const lightSections = ['author', 'about']; 
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            const brandLink = document.getElementById('brand-link');
+
+            // Options for the observer: rootMargin creates a 'hitbox' zone around the top of the viewport
+            const observerOptions = {
+                root: null, 
+                rootMargin: "-25% 0px -75% 0px", // Top 25% of viewport is the active zone
+                threshold: 0 
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const sectionId = entry.target.id;
+                    const correspondingLinks = document.querySelectorAll(`[href="#${sectionId}"]`);
+                    
+                    if (entry.isIntersecting) {
+                        const isLightSection = lightSections.includes(sectionId);
+
+                        // 1. Reset all links and apply base color for the entire navbar
+                        navLinks.forEach(link => {
+                            link.classList.remove('nav-active', 'nav-text-dark');
+                            // Ensure mobile links revert to default white text
+                            if (link.classList.contains('mobile-nav-link')) {
+                                link.classList.remove('text-accent-gold');
+                                link.classList.add('text-white');
+                            }
+                        });
+                        
+                        // Also update the brand link color
+                        brandLink.classList.remove('text-slate-700', 'text-white');
+                        brandLink.classList.add(isLightSection ? 'text-slate-700' : 'text-white');
+
+
+                        // 2. If the section is light, apply the dark text class to ALL links
+                        if (isLightSection) {
+                            navLinks.forEach(link => {
+                                link.classList.add('nav-text-dark');
+                            });
+                        }
+                        
+                   
+                        correspondingLinks.forEach(link => {
+                          
+                            link.classList.add('nav-active');
+
+                            // Specific handling for mobile links
+                            if (link.classList.contains('mobile-nav-link')) {
+                                link.classList.add('text-accent-gold');
+                                link.classList.remove('text-white');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections
+            document.querySelectorAll('.target-section').forEach(section => {
+                observer.observe(section);
+            });
+        };
+
+        // Initialize all functions on DOM content load
+        document.addEventListener('DOMContentLoaded', () => {
+            setupMobileMenu();
+            setupScrollReveal();
+            // Removed setupDynamicNavbar function
+            setupScrollSpy();
+        });
+    </script>
+</body>
+</html>
